@@ -43,62 +43,11 @@ echo "*                                                                         
 echo "********************************************************************************"
 echo ""
 
-lspci | grep VGA
-# Ensure it prints:
-#
-#  g2 instance:
-#   00:02.0 VGA compatible controller: Cirrus Logic GD 5446
-#   00:03.0 VGA compatible controller: NVIDIA Corporation GK104GL [GRID K520] (rev a1)
-#
-#  g3 instance:
-#   00:02.0 VGA compatible controller: Cirrus Logic GD 5446
-#   00:1e.0 VGA compatible controller: NVIDIA Corporation GM204GL [Tesla M60] (rev a1)
-
-echo ""
-echo "***************************************************************************************"
-echo "*                                                                                     *"
-echo "* YOU NEED TO EDIT /etc/X11/xorg.conf MANUALLY!!!!                                    *"
-echo "* Or use scripts with automatic xorg.conf fixing in directory for your instance type  *"
-echo "*                                                                                     *"
-echo "***************************************************************************************"
-echo ""
-
-exit 1
-
-# YOU NEED TO EDIT /etc/X11/xorg.conf:
-#
-# You can use nano for example:
-# sudo nano /etc/X11/xorg.conf
-# ... edit file ...
-# Press Ctrl+O -> Enter
-# Press Ctrl+X
-#
-# 1. Delete whole section ServerLayout (or comment it with # symbol)
-# 2. Delete whole section Screen (or comment it with # symbol)
-# 3. Add line with BusID in such way in section Device:
-#
-# BEFORE:
-#
-#Section "Device"
-#    Identifier     "Device0"
-#    Driver         "nvidia"
-#    VendorName     "NVIDIA Corporation"
-#    BoardName      <BOARD_NAME>
-#EndSection
-#
-# AFTER:
-#
-#Section "Device"
-#    Identifier     "Device0"
-#    Driver         "nvidia"
-#    VendorName     "NVIDIA Corporation"
-#    BoardName      <BOARD_NAME>
-#    BusID          <BUS_ID>
-#EndSection
-#
-# Where
-#  on g2 instance: BOARD_NAME="GRID K520" BUS_ID="PCI:0:3:0"
-#  on g3 instance: BOARD_NAME="Tesla M60" BUS_ID="PCI:0:30:0" (because 00:1e.0 output from lspci is in hexadecimal, but xorg.conf expects decimal)
+# Fix /etc/X11/xorg.conf:
+#  1. Delete whole section ServerLayout (comment it with # symbol)
+#  2. Delete whole section Screen (comment it with # symbol)
+#  3. Add line with BusID in section Device (taken from output of lspci | grep VGA)
+sudo /usr/bin/python2.7 fix_xorg_conf.py /etc/X11/xorg.conf
 
 # Install VirtualGL
 wget https://sourceforge.net/projects/virtualgl/files/2.5.2/virtualgl_2.5.2_amd64.deb/download -O virtualgl_2.5.2_amd64.deb
