@@ -62,7 +62,8 @@ if __name__ == '__main__':
     sections_to_delete = ["ServerLayout", "Screen"] if ec2_type == "g3" else []
 
     sections_deleted = []
-    device_section_found = False
+
+    device_index = 0
 
     print("  Writing fixed xorg.conf to {}".format(xorg_config_new))
     with open(xorg_config_new, 'w') as updated:
@@ -81,10 +82,10 @@ if __name__ == '__main__':
 
             if current_section is not None and line == section_end:
                 if current_section == "Device":
-                    _, _, bus_id_decimal = gpus[0]
+                    _, _, bus_id_decimal = gpus[device_index]
                     print("  BusID {} added!".format(bus_id_decimal))
                     updated.write("    BusID          \"PCI:{}\"\n".format(bus_id_decimal))
-                    device_section_found = True
+                    device_index += 1
                 current_section = None
 
             if removed:
@@ -92,7 +93,7 @@ if __name__ == '__main__':
             else:
                 updated.write("{}".format(line))
 
-    if not device_section_found:
+    if device_index == 0:
         print("Section \"Device\" was not found!")
         sys.exit(1)
     for section in sections_to_delete:
