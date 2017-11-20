@@ -24,7 +24,7 @@ Two **Tesla M60** are roughly equal to **GTX 1080ti**.
 
 # How to use
 
-Connect to g3 instance with Ubuntu 16.04:
+Connect to g3 instance with Ubuntu 16.04 via ssh:
 
 ```bash
 ip=239.239.239.239
@@ -42,7 +42,7 @@ chmod +x configure.sh
 ./configure.sh
 ```
 
-Wait a while when instance will be rebooted, then reconnect:
+Wait a while (~7 minutes) when instance will be rebooted, then reconnect:
 
 ```bash
 ssh -p 22 -i ${private_key} ubuntu@${ip}
