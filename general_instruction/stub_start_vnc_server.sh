@@ -1,5 +1,7 @@
 # ssh -p 22 -i ${private_key} ubuntu@${ip}
 
+set -e
+
 # Start the X server
 sudo service lightdm stop
 sudo xinit &
@@ -35,11 +37,11 @@ tar -zxf photoscan-pro_1_3_4_amd64.tar.gz
 vglrun photoscan-pro/photoscan.sh
 
 # Benchmarking:
-mkdir benchmark
-cd benchmark
-wget https://gist.githubusercontent.com/PolarNick239/fd2931434c4796f53f26d03622649179/raw/9549316e6d46d79bb1879b2a0e97382f61252562/benchmark.py
-
-wget https://www.dropbox.com/s/hh5yg0fmpr4bpn3/benchmarking_1.3.zip
-unzip benchmarking_1.3.zip
-
-../photoscan-pro/photoscan.sh -r benchmark.py >>benchmarking.log 2>&1
+# mkdir benchmark
+# cd benchmark
+# wget https://gist.githubusercontent.com/PolarNick239/fd2931434c4796f53f26d03622649179/raw/9549316e6d46d79bb1879b2a0e97382f61252562/benchmark.py
+#
+# wget https://www.dropbox.com/s/hh5yg0fmpr4bpn3/benchmarking_1.3.zip
+# unzip benchmarking_1.3.zip
+#
+# ../photoscan-pro/photoscan.sh -r benchmark.py >>benchmarking.log 2>&1

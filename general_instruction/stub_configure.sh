@@ -5,6 +5,8 @@
 
 NVIDIA_DRIVER=384.59
 
+set -e
+
 sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -yq
 
