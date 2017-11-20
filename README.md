@@ -45,6 +45,9 @@ chmod +x start_vnc_server.sh
 
 Connect with TurboVNC:
 ```bash
+# You can install it with:
+#   wget https://sourceforge.net/projects/turbovnc/files/2.1.1/turbovnc_2.1.1_amd64.deb/download -O turbovnc_2.1.1_amd64.deb
+#   sudo dpkg -i turbovnc*.deb
 /opt/TurboVNC/bin/vncviewer ${ip}:5901
 # Enter password you configured above
 ```
