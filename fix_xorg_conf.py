@@ -17,6 +17,8 @@ if __name__ == '__main__':
 
     gpus = []
 
+    ec2_type = None
+
     for line in vga_devices.split('\n'):
         if len(line) == 0:
             continue
@@ -28,10 +30,17 @@ if __name__ == '__main__':
             bus_id1, bus_id2 = bus_id12.split('.')
             bus_id_decimal = "{}:{}:{}".format(int(bus_id0, 16), int(bus_id1, 16), int(bus_id2, 16))
             gpus.append((line, bus_id_hex, bus_id_decimal))
+            if "GRID K520" in line:
+                ec2_type = "g2"
+            elif "Tesla M60" in line:
+                ec2_type = "g3"
 
     if len(gpus) == 0:
         print("No GPUs detected with 'lspci | grep VGA'!")
         sys.exit(1)
+
+    if ec2_type is not None:
+        print("EC2 instance type: {}".format(ec2_type))
 
     print("{} GPUs detected:".format(len(gpus)))
     print("  {: <10s} {: <10s} {}".format("BusID hex", "BusID dec", "lspci output"))
@@ -50,7 +59,7 @@ if __name__ == '__main__':
     # 3. Add line with BusID in section Device (taken from output of lspci | grep VGA)
     section_start = "Section \""
     section_end   = "EndSection\n"
-    sections_to_delete = ["ServerLayout", "Screen"]
+    sections_to_delete = ["ServerLayout", "Screen"] if ec2_type == "g3" else []
 
     sections_deleted = []
     device_section_found = False
