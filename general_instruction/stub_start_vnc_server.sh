@@ -26,15 +26,15 @@ echo ""
 # Press Ctrl+D to disconnect
 
 # Connect with TurboVNC:
-/opt/TurboVNC/bin/vncviewer ${ip}:5901
+# /opt/TurboVNC/bin/vncviewer ${ip}:5901
 # Enter password you configured above
 
 # Download PhotoScan from http://www.agisoft.com/downloads/installer/
-wget http://download.agisoft.com/photoscan-pro_1_3_4_amd64.tar.gz
+# wget http://download.agisoft.com/photoscan-pro_1_3_4_amd64.tar.gz
 # Extract it:
-tar -zxf photoscan-pro_1_3_4_amd64.tar.gz
+# tar -zxf photoscan-pro_1_3_4_amd64.tar.gz
 # Now you can run any OpenGL application with vglrun:
-vglrun photoscan-pro/photoscan.sh
+# vglrun photoscan-pro/photoscan.sh
 
 # Benchmarking:
 # mkdir benchmark
