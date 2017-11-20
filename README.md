@@ -1,12 +1,30 @@
 # Cloud scripts
 
-These scripts configure Ubuntu on EC2 graphics instances to support running OpenGL applications in TurboVNC via VirtualGL.
+These scripts can configure Ubuntu 16.04 on EC2 graphics instances to support running OpenGL applications in TurboVNC via VirtualGL.
 
-Hint: use a spot instance and attach an external volume where you can save your work - this will result in major cost savings!
+Please note that these scripts are tested on Amazon EC2 g2 and g3 instances, but they can work without or with a little changes on instances of other hosting providers.
+
+# EC2 instances
+
+Recommended instances - **g3.4xlarge**, **g3.8xlarge** and **g3.16xlarge**.
+
+Also if you don't need GUI (i.e. don't need OpenGL) - you can look at **p3** instances too.
+
+| EC2 instance  | GPUs          | vCPUs |   RAM  | On demand      | ~ Spot instance |
+| ------------- | ------------- | ----- | ------ | -------------- | --------------- |
+| g3.4xlarge    | 1 x Tesla M60 | 16    | 122 Gb | $1.21 per hour | ~ $0.4 per hour |
+| g3.8xlarge    | 2 x Tesla M60 | 32    | 244 Gb | $2.42 per hour | N/A             |
+| g3.16xlarge   | 4 x Tesla M60 | 64    | 488 Gb | $4.84 per hour | N/A             |
+
+Two **Tesla M60** are roughly equal to **GTX 1080ti**.
+
+16 vCPUs of g3.4xlarge are a little bit faster than i7 5960X.
+
+**Hint:** use a spot instance and attach an external volume where you can save your work - this will result in major cost savings.
 
 # How to use
 
-Connect with EC2 g3 instance:
+Connect to g3 instance with Ubuntu 16.04:
 
 ```bash
 ip=239.239.239.239
@@ -58,6 +76,7 @@ In terminal on instance you can download and run PhotoScan or any other OpenGL a
 wget http://download.agisoft.com/photoscan-pro_1_3_4_amd64.tar.gz
 # Extract it:
 tar -zxf photoscan-pro_1_3_4_amd64.tar.gz
+
 # Now you can run any OpenGL application with vglrun:
 vglrun photoscan-pro/photoscan.sh
 ```
