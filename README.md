@@ -22,7 +22,7 @@ Also if you don't need GUI (i.e. don't need OpenGL) - you can look at **p3** ins
 | p3.8xlarge    | 4 x V100|   x6.95   | 32 vCPUs | x2.1      | 244 GiB| $12    per hour | ~ $3   per hour |
 
 **g3 spot** instances offer best ratio of performance per $ on EC2.
-But please note that you can find other cloud providers with GTX GPUs that could offer better ratio of performance per hour cost.
+But please note that there can be other cloud providers with GPUs (even with GTX) that could offer better ratio of performance per hour cost.
 If you need assistance with launching on them - create issue, or start topic [on forum](http://www.agisoft.com/forum/).
 
 **GPU speed** and **CPU speed** represents a typical relative speedup from **Baseline Linux**.
