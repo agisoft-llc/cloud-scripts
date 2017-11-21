@@ -10,15 +10,22 @@ Recommended instances - **g3.4xlarge**, **g3.8xlarge** and **g3.16xlarge**.
 
 Also if you don't need GUI (i.e. don't need OpenGL) - you can look at **p3** instances too.
 
-| EC2 instance  | GPUs          | vCPUs |   RAM  | On demand      | ~ Spot instance |
-| ------------- | ------------- | ----- | ------ | -------------- | --------------- |
-| g3.4xlarge    | 1 x Tesla M60 | 16    | 122 Gb | $1.21 per hour | ~ $0.4 per hour |
-| g3.8xlarge    | 2 x Tesla M60 | 32    | 244 Gb | $2.42 per hour | N/A             |
-| g3.16xlarge   | 4 x Tesla M60 | 64    | 488 Gb | $4.84 per hour | N/A             |
+| Name          | GPUs    | GPU speed | CPUs     | CPU speed | RAM    | On demand       | ~ Spot instance |
+| ------------- | ------- | --------- | -------- | --------- | ------ | --------------- | --------------- |
+|**Baseline Linux**| GTX1080 |   x1.0    | i7 5960X | x1.0      | 64 Gb  | N/A             | N/A             |
+| Baseline Win7 | GTX1080 |   x0.85   | i7 5960X | x1.0      | 64 Gb  | N/A             | N/A             |
+| p2.xlarge     | 1 x K80 |   x0.35   |  4 vCPUs | x0.31     | 61 GiB | $ 0.9  per hour | ~ $0.2 per hour |
+|**g3.4xlarge**| 1 x M60 |   x0.7    | 16 vCPUs | x1.16     | 122 GiB| $ 1.21 per hour | ~ $0.4 per hour |
+|**g3.8xlarge**| 2 x M60 |   x1.38   | 32 vCPUs | x2.09     | 244 GiB| $ 2.42 per hour | N/A             |
+|**g3.16xlarge**| 4 x M60 |   x2.58   | 64 vCPUs | x2.74     | 488 GiB| $ 4.84 per hour | N/A             |
+| p3.2xlarge    | 1 x V100|   x2.05   |  8 vCPUs | x0.61     | 61  GiB| $ 3    per hour | N/A             |
+| p3.8xlarge    | 4 x V100|   x6.95   | 32 vCPUs | x2.1      | 244 GiB| $12    per hour | ~ $3   per hour |
 
-Two **Tesla M60** are roughly equal to **GTX 1080ti**.
+**g3 spot** instances offer best ratio of performance per $ on EC2.
+But please note that you can find other cloud providers with GTX GPUs that could offer better ratio of performance per hour cost.
+If you need assistance with launching on them - create issue, or start topic [on forum](http://www.agisoft.com/forum/).
 
-16 vCPUs of g3.4xlarge are a little bit faster than i7 5960X.
+**GPU speed** and **CPU speed** represents a typical relative speedup from **Baseline Linux**.
 
 **Hint:** use a spot instance and attach an external volume where you can save your work - this will result in major cost savings.
 
