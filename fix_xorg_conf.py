@@ -34,6 +34,10 @@ if __name__ == '__main__':
                 ec2_type = "g2"
             elif "Tesla M60" in line:
                 ec2_type = "g3"
+            elif "Tesla K80" in line:
+                ec2_type = "p2"
+            elif "NVIDIA Corporation Device 1db1 (rev a1)" in line:
+                ec2_type = "p3"
 
     if len(gpus) == 0:
         print("No GPUs detected with 'lspci | egrep -h \"VGA|3D controller\"'!")
@@ -54,12 +58,15 @@ if __name__ == '__main__':
     with open(xorg_config, 'r') as config:
         lines = config.readlines()
 
-    # 1. Delete whole section ServerLayout (comment it with # symbol)
-    # 2. Delete whole section Screen (comment it with # symbol)
-    # 3. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller")
+    # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller")
+    # For g3 and p3 also:
+    # 2. Delete whole section ServerLayout (comment it with # symbol)
+    # 3. Delete whole section Screen (comment it with # symbol)
     section_start = "Section \""
     section_end   = "EndSection\n"
-    sections_to_delete = ["ServerLayout", "Screen"] if ec2_type == "g3" else []
+    sections_to_delete = []
+    if ec2_type in ["g3", "p3"]:
+        sections_to_delete = ["ServerLayout", "Screen"]
 
     sections_deleted = []
 
