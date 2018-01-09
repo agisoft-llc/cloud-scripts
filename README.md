@@ -22,7 +22,7 @@ Recommended instance - **g3.8xlarge**.
 Spot instance prices from EU region (Ireland) actual for 09.01.2017.
 
 Please note that there can be other cloud providers with GPUs (even with GTX) that could offer better ratio of performance per hour cost.
-If you need assistance with launching on them - create issue, or start topic [on forum](http://www.agisoft.com/forum/) (please provide cloud-scripts/configure.log).
+If you need assistance with launching on them - create issue, or start topic [on forum](http://www.agisoft.com/forum/) (please provide ```cloud-scripts/configure.log```, ```cloud-scripts/start_vnc_server.log``` and ```/var/log/Xorg.0.log```).
 
 **GPU speed** and **CPU speed** represents a typical relative speedup from **Baseline Linux**.
 
@@ -59,7 +59,7 @@ Start X server and VNC server:
 ```bash
 cd cloud-scripts
 chmod +x start_vnc_server.sh
-./start_vnc_server.sh
+./start_vnc_server.sh 2>&1 | tee start_vnc_server.log
 # You will be asked to enter Password twice.
 # You will be also asked:
 #  Would you like to enter a view-only password (y/n)? n
