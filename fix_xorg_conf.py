@@ -59,9 +59,14 @@ if __name__ == '__main__':
         lines = config.readlines()
 
     # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller")
-    # For g3 and p3 also:
+    # For EC2 g3 and p3 also:
     # 2. Delete whole section ServerLayout (comment it with # symbol)
     # 3. Delete whole section Screen (comment it with # symbol)
+    #
+    # On EC2 g3 and p3 steps 2 and 3 to fix this error in /var/log/Xorg.0.log:
+    # (EE) NVIDIA(GPU-0): UseDisplayDevice "None" is not supported with GRID
+    # (EE) NVIDIA(GPU-0):     displayless
+    # (EE) NVIDIA(GPU-0): Failed to select a display subsystem.
     section_start = "Section \""
     section_end   = "EndSection\n"
     sections_to_delete = []
