@@ -10,7 +10,7 @@ if __name__ == '__main__':
     xorg_config = sys.argv[1]
 
     lspci_p = subprocess.Popen(['lspci'], stdout=subprocess.PIPE)
-    lspci_vga_p = subprocess.Popen(['grep', 'VGA'], stdin=lspci_p.stdout, stdout=subprocess.PIPE)
+    lspci_vga_p = subprocess.Popen(['egrep', '-h', 'VGA|3D controller'], stdin=lspci_p.stdout, stdout=subprocess.PIPE)
     lspci_p.stdout.close()
 
     vga_devices = lspci_vga_p.communicate()[0]
@@ -36,7 +36,7 @@ if __name__ == '__main__':
                 ec2_type = "g3"
 
     if len(gpus) == 0:
-        print("No GPUs detected with 'lspci | grep VGA'!")
+        print("No GPUs detected with 'lspci | egrep -h \"VGA|3D controller\"'!")
         sys.exit(1)
 
     if ec2_type is not None:
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     # 1. Delete whole section ServerLayout (comment it with # symbol)
     # 2. Delete whole section Screen (comment it with # symbol)
-    # 3. Add line with BusID in section Device (taken from output of lspci | grep VGA)
+    # 3. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller")
     section_start = "Section \""
     section_end   = "EndSection\n"
     sections_to_delete = ["ServerLayout", "Screen"] if ec2_type == "g3" else []
