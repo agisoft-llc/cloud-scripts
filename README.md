@@ -22,7 +22,7 @@ Recommended instance - **g3.8xlarge**.
 Spot instance prices from EU region (Ireland) actual for 09.01.2017.
 
 Please note that there can be other cloud providers with GPUs (even with GTX) that could offer better ratio of performance per hour cost.
-If you need assistance with launching on them - create issue, or start topic [on forum](http://www.agisoft.com/forum/) (please provide ```cloud-scripts/configure.log```, ```cloud-scripts/start_vnc_server.log``` and ```/var/log/Xorg.0.log```).
+If you need assistance with launching on them - create issue, or start topic [on forum](http://www.agisoft.com/forum/) (please provide ```cloud-scripts/configure.log```, ```cloud-scripts/start_vnc_server.log```, ```/etc/X11/xorg.conf```, ```/var/log/Xorg.0.log``` and output of ```nvidia-smi``` execution).
 
 **GPU speed** and **CPU speed** represents a typical relative speedup from **Baseline Linux**.
 
