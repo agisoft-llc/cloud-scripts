@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     gpus = []
 
-    ec2_type = None
+    instance_type = None
 
     for line in vga_devices.split('\n'):
         if len(line) == 0:
@@ -31,20 +31,22 @@ if __name__ == '__main__':
             bus_id_decimal = "{}:{}:{}".format(int(bus_id0, 16), int(bus_id1, 16), int(bus_id2, 16))
             gpus.append((line, bus_id_hex, bus_id_decimal))
             if "GRID K520" in line:
-                ec2_type = "g2"
+                instance_type = "EC2 g2"
             elif "Tesla M60" in line:
-                ec2_type = "g3"
+                instance_type = "EC2 g3"
             elif "Tesla K80" in line:
-                ec2_type = "p2"
+                instance_type = "EC2 p2"
             elif "NVIDIA Corporation Device 1db1 (rev a1)" in line:
-                ec2_type = "p3"
+                instance_type = "EC2 p3"
+            elif "NVIDIA Corporation Device 15f8 (rev a1)" in line:
+                instance_type = "P100 PCIE"
 
     if len(gpus) == 0:
         print("No GPUs detected with 'lspci | egrep -h \"VGA|3D controller\"'!")
         sys.exit(1)
 
-    if ec2_type is not None:
-        print("EC2 instance type: {}".format(ec2_type))
+    if instance_type is not None:
+        print("Instance type: {}".format(instance_type))
 
     print("{} GPUs detected:".format(len(gpus)))
     print("  {: <10s} {: <10s} {}".format("BusID hex", "BusID dec", "lspci output"))
@@ -59,18 +61,18 @@ if __name__ == '__main__':
         lines = config.readlines()
 
     # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller")
-    # For EC2 g3 and p3 also:
+    # For EC2 g3, EC2 p3 and for P100 PCIE also:
     # 2. Delete whole section ServerLayout (comment it with # symbol)
     # 3. Delete whole section Screen (comment it with # symbol)
     #
-    # On EC2 g3 and p3 steps 2 and 3 to fix this error in /var/log/Xorg.0.log:
+    # On EC2 g3, EC2 p3 and for P100 PCIE steps 2 and 3 to fix this error in /var/log/Xorg.0.log:
     # (EE) NVIDIA(GPU-0): UseDisplayDevice "None" is not supported with GRID
     # (EE) NVIDIA(GPU-0):     displayless
     # (EE) NVIDIA(GPU-0): Failed to select a display subsystem.
     section_start = "Section \""
     section_end   = "EndSection\n"
     sections_to_delete = []
-    if ec2_type in ["g3", "p3"]:
+    if instance_type in ["EC2 g3", "EC2 p3", "P100 PCIE"]:
         sections_to_delete = ["ServerLayout", "Screen"]
 
     sections_deleted = []
