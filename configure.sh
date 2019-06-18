@@ -3,7 +3,14 @@
 # ssh -p 22 -i ${private_key} ubuntu@${ip}
 #  Are you sure you want to continue connecting (yes/no)? yes
 
-NVIDIA_DRIVER=384.59
+ubuntu_codename=`lsb_release -c -s`
+
+if [ "$ubuntu_codename" = "bionic" ] ; then
+    # Ubuntu 18.04
+    NVIDIA_DRIVER=430.26
+else
+    NVIDIA_DRIVER=384.59
+fi
 
 set -e
 
