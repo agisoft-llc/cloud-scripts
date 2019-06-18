@@ -21,6 +21,12 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -yq
 sudo apt-get install -y gcc make pkg-config xserver-xorg-dev linux-headers-$(uname -r) xterm
 # xterm is needed for xinit
 
+if [ "$ubuntu_codename" = "bionic" ] ; then
+    # Ubuntu 18.04 - to fix following error:
+    # ./metashape: error while loading shared libraries: libGLU.so.1: cannot open shared object file: No such file or directory
+    sudo apt-get install -y libglu1-mesa
+fi
+
 # Install Lubuntu/Xubuntu/anything
 sudo apt-get install -y lubuntu-desktop
 
