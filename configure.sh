@@ -9,7 +9,7 @@ if [ "$ubuntu_codename" = "bionic" ] ; then
     # Ubuntu 18.04
     NVIDIA_DRIVER=430.26
 else
-    NVIDIA_DRIVER=384.59
+    NVIDIA_DRIVER=390.116
 fi
 
 set -e
