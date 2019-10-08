@@ -36,10 +36,12 @@ if __name__ == '__main__':
                 instance_type = "EC2 g3"
             elif "Tesla K80" in line:
                 instance_type = "EC2 p2"
-            elif "NVIDIA Corporation Device 1db1 (rev a1)" in line:
-                instance_type = "EC2 p3"
+            # elif "NVIDIA Corporation Device 1db1 (rev a1)" in line:
+            #    instance_type = "EC2 p3"
             elif "NVIDIA Corporation Device 15f8 (rev a1)" in line:
                 instance_type = "P100 PCIE"
+	    elif "NVIDIA Corporation GV100GL [Tesla V100 SXM2 16GB] (rev a1)" in line:
+		instance_type = "EC2 p3"
 
     if len(gpus) == 0:
         print("No GPUs detected with 'lspci | egrep -h \"VGA|3D controller\"'!")
