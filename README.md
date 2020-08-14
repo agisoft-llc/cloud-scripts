@@ -69,7 +69,7 @@ chmod +x start_vnc_server.sh
 # Press Ctrl+D to disconnect
 ```
 
-Connect with TurboVNC:
+Connect with TurboVNC (don't forget to allow inbounds for 5901 port in security groups):
 ```bash
 # You can install it with:
 #   wget https://sourceforge.net/projects/turbovnc/files/2.1.1/turbovnc_2.1.1_amd64.deb/download -O turbovnc_2.1.1_amd64.deb
