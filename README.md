@@ -21,6 +21,8 @@ Recommended instance - **g3.8xlarge**.
 
 Spot instance prices from EU region (Ireland) actual for 09.01.2017.
 
+Another [table with Amazon EC2 GPU instances comparison](https://docs.google.com/spreadsheets/d/1KUIag-1SmjI80BYXLpiruX3NiWCgajR8nGxrSEI5HSM/edit?usp=sharing) including performance per $ (w.r.t. spot instance prices actual on 14.08.2020).
+
 Please note that there can be other cloud providers with GPUs (even with GTX) that could offer better ratio of performance per hour cost.
 If you need assistance with launching on them - create issue, or start topic [on forum](http://www.agisoft.com/forum/) (please provide ```cloud-scripts/configure.log```, ```cloud-scripts/start_vnc_server.log```, ```/etc/X11/xorg.conf```, ```/var/log/Xorg.0.log``` and output of ```nvidia-smi``` execution).
 
