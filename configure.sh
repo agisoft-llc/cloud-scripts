@@ -5,7 +5,7 @@
 
 ubuntu_codename=`lsb_release -c -s`
 
-if lspci | egrep -q -h "NVIDIA Corporation Device 1eb8 (rev a1)"; then
+if lspci | egrep -q -h "NVIDIA Corporation Device 1eb8 \(rev a1\)"; then
     # Tesla T4
     NVIDIA_DRIVER=450.51.06
     NVIDIA_DRIVER_URL=http://us.download.nvidia.com/tesla/450.51.06/NVIDIA-Linux-x86_64-450.51.06.run
