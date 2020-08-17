@@ -5,11 +5,17 @@
 
 ubuntu_codename=`lsb_release -c -s`
 
-if [ "$ubuntu_codename" = "bionic" ] ; then
+if lspci | egrep -q -h "NVIDIA Corporation Device 1eb8 (rev a1)"; then
+    # Tesla T4
+    NVIDIA_DRIVER=450.51.06
+    NVIDIA_DRIVER_URL=http://us.download.nvidia.com/tesla/450.51.06/NVIDIA-Linux-x86_64-450.51.06.run
+elif [ "$ubuntu_codename" = "bionic" ] ; then
     # Ubuntu 18.04
     NVIDIA_DRIVER=430.26
+    NVIDIA_DRIVER_URL=http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
 else
     NVIDIA_DRIVER=390.116
+    NVIDIA_DRIVER_URL=http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
 fi
 
 set -e
@@ -31,7 +37,7 @@ fi
 sudo apt-get install -y lubuntu-desktop
 
 # Installing NVidia driver
-curl -O http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
+curl -O ${NVIDIA_DRIVER_URL}
 chmod +x NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
 sudo ./NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run --no-questions --accept-license --no-precompiled-interface --ui=none
 echo ""
@@ -60,7 +66,7 @@ echo ""
 
 # Fix /etc/X11/xorg.conf:
 # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller")
-# For EC2 g3 and p3 also:
+# For EC2 g3, g4 and p3 also:
 # 2. Delete whole section ServerLayout (comment it with # symbol)
 # 3. Delete whole section Screen (comment it with # symbol)
 sudo /usr/bin/python2.7 fix_xorg_conf.py /etc/X11/xorg.conf
