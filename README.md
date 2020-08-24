@@ -1,6 +1,6 @@
 # Cloud scripts
 
-These scripts can configure Ubuntu 16.04 on EC2 graphics instances to support running OpenGL applications in TurboVNC via VirtualGL.
+These scripts can configure Ubuntu 16.04 and Ubuntu 18.04 on EC2 graphics instances to support running OpenGL applications in TurboVNC via VirtualGL.
 
 Please note that these scripts are tested on Amazon EC2 g2, g3, g4, p2 and p3 instances, but they can work without or with a little changes on instances of other hosting providers.
 
