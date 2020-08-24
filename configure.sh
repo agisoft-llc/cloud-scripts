@@ -24,7 +24,7 @@ sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -yq
 
 # Prepare for NVidia drivers install
-sudo apt-get install -y gcc make pkg-config xserver-xorg-dev linux-headers-$(uname -r) xterm
+sudo apt-get install -y gcc make pkg-config xserver-xorg-dev linux-headers-$(uname -r) xterm xinit
 # xterm is needed for xinit
 
 if [ "$ubuntu_codename" = "bionic" ] ; then
