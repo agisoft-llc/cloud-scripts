@@ -11,7 +11,7 @@ if lspci | egrep -q -h "NVIDIA Corporation Device 1eb8 \(rev a1\)"; then
     NVIDIA_DRIVER_URL=http://us.download.nvidia.com/tesla/450.51.06/NVIDIA-Linux-x86_64-450.51.06.run
 elif [ "$ubuntu_codename" = "bionic" ] ; then
     # Ubuntu 18.04
-    NVIDIA_DRIVER=430.26
+    NVIDIA_DRIVER=460.32.03
     NVIDIA_DRIVER_URL=http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
 else
     NVIDIA_DRIVER=390.116
