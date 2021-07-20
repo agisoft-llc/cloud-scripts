@@ -8,15 +8,14 @@ if lspci | egrep -q -h "Display controller: Advanced Micro Devices, Inc"; then
     DISPLAY=:0 xrandr --output Virtual --mode 1680x1050
     DISPLAY=:0 xrandr --output Virtual-1 --mode 1680x1050
 
-    # You will be asked to enter the password for 'ubuntu' user
-    echo ""
-    echo "************************************************************************************************"
-    echo "*                                                                                              *"
-    echo "* Enter password that will be used for user with login 'ubuntu':                               *"
-    echo "*                                                                                              *"
-    echo "************************************************************************************************"
-    echo ""
-    if [[ $(passwd --status polarnick | grep NP) ]]; then
+    if [[ $(passwd --status ubuntu | grep "ubuntu L") ]]; then
+        echo ""
+        echo "************************************************************************************************"
+        echo "*                                                                                              *"
+        echo "* Enter password that will be used for user with login 'ubuntu':                               *"
+        echo "*                                                                                              *"
+        echo "************************************************************************************************"
+        echo ""
         sudo passwd ubuntu
     fi
 

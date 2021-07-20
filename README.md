@@ -1,25 +1,27 @@
 # Cloud scripts
 
-These scripts can configure Ubuntu 16.04 and Ubuntu 18.04 on EC2 graphics instances to support running OpenGL applications in TurboVNC via VirtualGL.
+These scripts can configure Ubuntu 18.04 on EC2 graphics instances to support running OpenGL applications in TurboVNC via VirtualGL.
 
-Please note that these scripts are tested on Amazon EC2 g2, g3, g4, p2 and p3 instances, but they can work without or with a little changes on instances of other hosting providers.
+Please note that these scripts are tested on Amazon EC2 g2, g3, g4, p2, p3 and g4ad (AMD V520) instances, but they can work without or with a little changes on instances of other hosting providers.
 
 # EC2 instances
 
-Recommended instance - **g3.8xlarge**.
+Recommended instance - **g4ad.8xlarge**.
 
 | Name          | GPUs    | GPU speed | CPUs     | CPU speed | RAM    | On demand       | ~ Spot instance |
 | ------------- | ------- | --------- | -------- | --------- | ------ | --------------- | --------------- |
 | Baseline Linux| GTX1080 |   x1.0    | i7 5960X | x1.0      | 64 Gb  | N/A             | N/A             |
 | Baseline Win7 | GTX1080 |   x0.85   | i7 5960X | x1.0      | 64 Gb  | N/A             | N/A             |
-| p2.xlarge     | 1 x K80 |   x0.35   |  4 vCPUs | x0.31     | 61 GiB | $ 0.9  per hour | ~ $0.2 per hour |
+| p2.xlarge     | 1 x K80 |   x0.35   |  4 vCPUs | x0.31     | 61 GiB | $ 0.97 per hour | ~ $0.3 per hour |
 | g3.4xlarge    | 1 x M60 |   x0.7    | 16 vCPUs | x1.16     | 122 GiB| $ 1.21 per hour | ~ $0.4 per hour |
-|**g3.8xlarge** | 2 x M60 |   x1.38   | 32 vCPUs | x2.09     | 244 GiB| $ 2.42 per hour | ~ $0.8 per hour |
-| g3.16xlarge   | 4 x M60 |   x2.58   | 64 vCPUs | x2.74     | 488 GiB| $ 4.84 per hour | N/A             |
-| p3.2xlarge    | 1 x V100|   x2.05   |  8 vCPUs | x0.61     | 61  GiB| $ 3    per hour | ~ $2   per hour |
-| p3.8xlarge    | 4 x V100|   x6.95   | 32 vCPUs | x2.1      | 244 GiB| $12    per hour | ~ $7   per hour |
+| g3.8xlarge    | 2 x M60 |   x1.38   | 32 vCPUs | x2.09     | 244 GiB| $ 2.42 per hour | ~ $0.7 per hour |
+| g3.16xlarge   | 4 x M60 |   x2.58   | 64 vCPUs | x2.74     | 488 GiB| $ 4.84 per hour | ~ $1.5 per hour |
+|**g4ad.4xlarge**|1 x V520|   x0.85   | 16 vCPUs | x1.31     |  64 GiB| $ 0.96 per hour | ~ $0.3 per hour |
+|**g4ad.8xlarge**|2 x V520|   x1.63   | 32 vCPUs | x2.3      | 128 GiB| $ 1.94 per hour | ~ $0.6 per hour |
+| p3.2xlarge    | 1 x V100|   x2.05   |  8 vCPUs | x0.61     | 61  GiB| $ 3.3  per hour | ~ $1   per hour |
+| p3.8xlarge    | 4 x V100|   x6.95   | 32 vCPUs | x2.1      | 244 GiB| $13.2  per hour | ~ $4   per hour |
 
-Spot instance prices from EU region (Ireland) actual for 09.01.2017.
+Spot instance prices from EU region (Ireland) actual for 20.07.2021.
 
 Another [table with Amazon EC2 GPU instances comparison](https://docs.google.com/spreadsheets/d/1KUIag-1SmjI80BYXLpiruX3NiWCgajR8nGxrSEI5HSM/edit?usp=sharing) including performance per $ (w.r.t. spot instance prices actual on 14.08.2020).
 
@@ -32,7 +34,7 @@ If you need assistance with launching on them - create issue, or start topic [on
 
 # How to use
 
-Connect to instance with Ubuntu 16.04 via ssh:
+Connect to instance with Ubuntu 18.04 via ssh:
 
 ```bash
 ip=239.239.239.239
