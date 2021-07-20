@@ -2,6 +2,15 @@ import os
 import sys
 import subprocess
 
+
+def extract_bus_id_hex_decimal(line):
+    bus_id_hex = line.split(' ')[0]
+    bus_id0, bus_id12 = bus_id_hex.split(':')[0], bus_id_hex.split(':')[1]
+    bus_id1, bus_id2 = bus_id12.split('.')
+    bus_id_decimal = "{}:{}:{}".format(int(bus_id0, 16), int(bus_id1, 16), int(bus_id2, 16))
+    return bus_id_hex, bus_id_decimal
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("Required argument: <path to xorg.conf>")
@@ -10,7 +19,7 @@ if __name__ == '__main__':
     xorg_config = sys.argv[1]
 
     lspci_p = subprocess.Popen(['lspci'], stdout=subprocess.PIPE)
-    lspci_vga_p = subprocess.Popen(['egrep', '-h', 'VGA|3D controller'], stdin=lspci_p.stdout, stdout=subprocess.PIPE)
+    lspci_vga_p = subprocess.Popen(['egrep', '-h', 'VGA|3D controller|Display controller'], stdin=lspci_p.stdout, stdout=subprocess.PIPE)
     lspci_p.stdout.close()
 
     vga_devices = lspci_vga_p.communicate()[0]
@@ -24,11 +33,15 @@ if __name__ == '__main__':
             continue
         if "Cirrus" in line:
             continue
+        if "Advanced Micro Devices" in line:
+            bus_id_hex, bus_id_decimal = extract_bus_id_hex_decimal(line)
+            gpus.append((line, bus_id_hex, bus_id_decimal))
+            if "Advanced Micro Devices, Inc. [AMD/ATI] Device 7362 (rev c3)" in line:  # AMD Radeon Pro V520
+                instance_type = "EC2 g4ad"
+            else:
+                print("Unexpected AMD GPU device: {}".format(line))
         if "NVIDIA Corporation" in line:
-            bus_id_hex = line.split(' ')[0]
-            bus_id0, bus_id12 = bus_id_hex.split(':')[0], bus_id_hex.split(':')[1]
-            bus_id1, bus_id2 = bus_id12.split('.')
-            bus_id_decimal = "{}:{}:{}".format(int(bus_id0, 16), int(bus_id1, 16), int(bus_id2, 16))
+            bus_id_hex, bus_id_decimal = extract_bus_id_hex_decimal(line)
             gpus.append((line, bus_id_hex, bus_id_decimal))
             if "GRID K520" in line:
                 instance_type = "EC2 g2"
@@ -44,9 +57,11 @@ if __name__ == '__main__':
                 instance_type = "EC2 p3"
             elif "NVIDIA Corporation Device 15f8 (rev a1)" in line:
                 instance_type = "P100 PCIE"
+            else:
+                print("Unexpected NVIDIA GPU device: {}".format(line))
 
     if len(gpus) == 0:
-        print("No GPUs detected with 'lspci | egrep -h \"VGA|3D controller\"'!")
+        print("No GPUs detected with 'lspci | egrep -h \"VGA|3D controller|Display controller\"'!")
         sys.exit(1)
 
     if instance_type is not None:
@@ -64,7 +79,7 @@ if __name__ == '__main__':
     with open(xorg_config, 'r') as config:
         lines = config.readlines()
 
-    # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller")
+    # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller|Display controller")
     # For EC2 g3, EC2 g4, EC2 p3 and for P100 PCIE also:
     # 2. Delete whole section ServerLayout (comment it with # symbol)
     # 3. Delete whole section Screen (comment it with # symbol)
