@@ -62,9 +62,15 @@ Start X server and VNC server:
 cd cloud-scripts
 chmod +x start_vnc_server.sh
 ./start_vnc_server.sh 2>&1 | tee start_vnc_server.log
-# You will be asked to enter Password twice.
-# You will be also asked:
-#  Would you like to enter a view-only password (y/n)? n
+# On NVIDIA instances:
+#  You will be asked to enter VNC Password twice.
+#  You will be also asked:
+#   Would you like to enter a view-only password (y/n)? n
+# On AMD instances (G4ad):
+#  You will be asked to enter Password for the ubuntu user twice.
+#  And you will be asked to enter VNC Password twice.
+#  You will be also asked:
+#   Write password to /home/ubuntu/.vnc/passwd?  [y]/n y <- so that you will not be ask again to enter the password (on VNC server start)
 
 # Press Ctrl+D to disconnect
 ```
@@ -78,15 +84,19 @@ Connect with TurboVNC (don't forget to allow inbounds for 5901 port in security 
 # Enter password you configured above
 ```
 
-In terminal on instance you can download and run PhotoScan or any other OpenGL app with GUI:
+In terminal on instance you can download and run Metashape or any other OpenGL app with GUI:
 ```bash
-# Download PhotoScan from http://www.agisoft.com/downloads/installer/
-wget http://download.agisoft.com/photoscan-pro_1_4_0_amd64.tar.gz
+# Download Metashape from http://www.agisoft.com/downloads/installer/
+wget https://s3-eu-west-1.amazonaws.com/download.agisoft.com/metashape-pro_1_7_3_amd64.tar.gz
 # Extract it:
-tar -zxf photoscan-pro_1_4_0_amd64.tar.gz
+tar -zxf metashape-pro_1_7_3_amd64.tar.gz
 
-# Now you can run any OpenGL application with vglrun:
-vglrun photoscan-pro/photoscan.sh
+# Now you can run any OpenGL application:
+
+# On NVIDIA instances - via vglrun:
+vglrun metashape-pro/metashape.sh
+# On AMD instances (G4ad) - as is:
+metashape-pro/metashape.sh
 ```
 
 # References

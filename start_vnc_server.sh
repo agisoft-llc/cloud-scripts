@@ -6,6 +6,7 @@ if lspci | egrep -q -h "Display controller: Advanced Micro Devices, Inc"; then
     AMD_GPU=true
 
     DISPLAY=:0 xrandr --output Virtual --mode 1680x1050
+    DISPLAY=:0 xrandr --output Virtual-1 --mode 1680x1050
 
     # You will be asked to enter the password for 'ubuntu' user
     echo ""
@@ -15,7 +16,9 @@ if lspci | egrep -q -h "Display controller: Advanced Micro Devices, Inc"; then
     echo "*                                                                                              *"
     echo "************************************************************************************************"
     echo ""
-    sudo passwd ubuntu
+    if [[ $(passwd --status polarnick | grep NP) ]]; then
+        sudo passwd ubuntu
+    fi
 
     # Start the server on port 5901
     DISPLAY=:0 x11vnc -usepw -noncache -wait 5 -defer 5 -rfbport 5901
