@@ -44,48 +44,37 @@ fi
 sudo apt-get install -y lubuntu-desktop
 
 if $AMD_GPU; then
-    # Installing AMD driver, see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html (but we don't install 32-bit support)
+    # Install AMD ROCm driver
+    # https://view.readthedocs.io/en/latest/Installation_Guide/Installation-Guide.html#ubuntu-support-installing-from-a-debian-repository
+    sudo apt install -y libnuma-dev
+    wget -qO - http://repo.radeon.com/rocm/apt/debian/rocm.gpg.key | sudo apt-key add -
+    echo 'deb [arch=amd64] http://repo.radeon.com/rocm/apt/debian/ xenial main' | sudo tee /etc/apt/sources.list.d/rocm.list
+    sudo apt update
 
-    sudo apt install -y awscli
-    echo ""
-    echo "***************************************************************************************************"
-    echo "*                                                                                                 *"
-    echo "* To download AMD driver from Amazon S3 storage - you need to create an access token in IAM:      *"
-    echo "* 1) Open Identity and Access Management (IAM): https://console.aws.amazon.com/iamv2/home#/users  *"
-    echo "* 2) Add users                                                                                    *"
-    echo "* 3) User name: userForAmdDriverDownload                                                          *"
-    echo "* 4) Tick 'Programmatic access'                                                                   *"
-    echo "* 5) Next: Permissions                                                                            *"
-    echo "* 6) Attach existing policies directly -> Filter policies: S3                                     *"
-    echo "* 7) Tick 'AmazonS3ReadOnlyAccess'                                                                *"
-    echo "* 8) Next: Tags -> Next: Review -> Create user                                                    *"
-    echo "* 9) Copy and paste 'Access key ID' into the terminal -> Enter                                    *"
-    echo "* 10) Copy and paste 'Secret access key' into the terminal (click 'Show') -> Enter                *"
-    echo "* 11) Default region name [None]: -> enter your region (f.e. eu-west-1)                           *"
-    echo "* 12) Default output format [None]: -> leave empty and press Enter                                *"
-    echo "*                                                                                                 *"
-    echo "***************************************************************************************************"
-    echo ""
-    aws configure
+    # This is required to fix errors in dmesg like this:
+    # amdgpu: Unknown symbol amd_iommu_bind_pasid (err -2)
+    # see also https://github.com/RadeonOpenCompute/ROCm/issues/738#issuecomment-473421554
+    sudo apt install -y linux-modules-extra-$(uname -r) -y
 
-    aws s3 cp --recursive s3://ec2-amd-linux-drivers/latest/ .
-    # If you see "fatal error: An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied"
-    # This means that you created user in IAM with incorrect S3 storage access privileges
+    sudo apt install -y rocm-dkms
+    sudo usermod -a -G video $LOGNAME
+    echo 'ADD_EXTRA_GROUPS=1' | sudo tee -a /etc/adduser.conf
+    echo 'EXTRA_GROUPS=video' | sudo tee -a /etc/adduser.conf
 
-    tar -xf amdgpu-pro*ubuntu*.xz
-    rm amdgpu-pro*ubuntu*.xz
-    cd `ls | grep 'amdgpu.*ubuntu-18.04'`
-
-    sudo apt install linux-modules-extra-$(uname -r) -y
-    cat RPM-GPG-KEY-amdgpu | sudo apt-key add -
-
-    sudo ./amdgpu-pro-install -y --no-32 --opencl=pal,legacy
-    cd ..
+    # This is required to fix empty OpenCL devices list and error:
+    # dlerror: libamdocl64.so: cannot open shared object file: No such file or directory
+    AMD_VENDOR_ICD_FILE=/etc/OpenCL/vendors/`ls /etc/OpenCL/vendors/ | grep 'amdocl64*'`
+    echo "/opt/rocm/opencl/lib/libamdocl64.so" | sudo tee ${AMD_VENDOR_ICD_FILE}
 
     # Install VirtualGL
     wget https://sourceforge.net/projects/virtualgl/files/2.5.2/virtualgl_2.5.2_amd64.deb/download -O virtualgl_2.5.2_amd64.deb
     sudo dpkg -i virtualgl*.deb
     rm virtualgl*.deb
+
+    # Install TurboVNC
+    wget https://sourceforge.net/projects/turbovnc/files/2.1.1/turbovnc_2.1.1_amd64.deb/download -O turbovnc_2.1.1_amd64.deb
+    sudo dpkg -i turbovnc*.deb
+    rm turbovnc*.deb
 
     # Copy xorg.conf from instruction https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html
     sudo cp configs/xorg_aws_g4ad_amd_v520.conf /etc/X11/xorg.conf
@@ -98,8 +87,6 @@ if $AMD_GPU; then
     # "PAM unable to dlopen(pam_kwallet.so): /lib/security/pam_kwallet.so: cannot open shared object file: No such file or directory"
     # See also: https://askubuntu.com/questions/758696/cannot-login-into-locked-ubuntu-14-04-session-unity
     sudo apt-get install -y libpam-kwallet4 libpam-kwallet5
-
-    sudo apt install -y x11vnc
 else
     # Installing NVidia driver
     curl -O ${NVIDIA_DRIVER_URL}

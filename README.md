@@ -34,6 +34,9 @@ If you need assistance with launching on them - create issue, or start topic [on
 
 # How to use
 
+If you use **G4ad** instance (with AMD Radeon V520) - please **ensure to increase the root storage** for the launched instance - on Step 4. Add Storage - increase Size for Root volume (/dev/sda1 device) from 8 GB to at least 16 GB.
+This is required for the installation of AMD ROCm driver.
+
 Connect to instance with Ubuntu 18.04 via ssh:
 
 ```bash
@@ -64,15 +67,9 @@ Start X server and VNC server:
 cd cloud-scripts
 chmod +x start_vnc_server.sh
 ./start_vnc_server.sh 2>&1 | tee start_vnc_server.log
-# On NVIDIA instances:
-#  You will be asked to enter VNC Password twice.
-#  You will be also asked:
-#   Would you like to enter a view-only password (y/n)? n
-# On AMD instances (G4ad):
-#  You will be asked to enter Password for the ubuntu user twice.
-#  And you will be asked to enter VNC Password twice.
-#  You will be also asked:
-#   Write password to /home/ubuntu/.vnc/passwd?  [y]/n y <- so that you will not be ask again to enter the password (on VNC server start)
+# You will be asked to enter VNC Password twice.
+# You will be also asked:
+#  Would you like to enter a view-only password (y/n)? n
 
 # Press Ctrl+D to disconnect
 ```
@@ -93,12 +90,8 @@ wget https://s3-eu-west-1.amazonaws.com/download.agisoft.com/metashape-pro_1_7_3
 # Extract it:
 tar -zxf metashape-pro_1_7_3_amd64.tar.gz
 
-# Now you can run any OpenGL application:
-
-# On NVIDIA instances - via vglrun:
+# Now you can run any OpenGL application with vglrun:
 vglrun metashape-pro/metashape.sh
-# On AMD instances (G4ad) - as is:
-metashape-pro/metashape.sh
 ```
 
 # References
