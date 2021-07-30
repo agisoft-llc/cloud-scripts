@@ -76,7 +76,6 @@ if $AMD_GPU; then
     sudo dpkg -i virtualgl*.deb
     rm virtualgl*.deb
 
-    sudo apt build-dep -y x11vnc
     sudo apt install -y libssl-dev libxtst-dev xorg-dev libvncserver-dev
     git clone https://github.com/LibVNC/x11vnc
     cd x11vnc
@@ -85,6 +84,7 @@ if $AMD_GPU; then
     ./configure
     make -j12
     sudo make install
+    cd ..
 
     # Copy xorg.conf from instruction https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html
     sudo cp configs/xorg_aws_g4ad_amd_v520.conf /etc/X11/xorg.conf

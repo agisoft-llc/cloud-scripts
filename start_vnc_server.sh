@@ -6,6 +6,7 @@ if lspci | egrep -q -h "Display controller: Advanced Micro Devices, Inc"; then
     AMD_GPU=true
 
     DISPLAY=:0 xrandr --output Virtual --mode 1680x1050
+    DISPLAY=:0 xrandr --output Virtual-1 --mode 1680x1050
 
     if [[ $(passwd --status ubuntu | grep "ubuntu L") ]]; then
         echo ""
