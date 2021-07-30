@@ -44,37 +44,47 @@ fi
 sudo apt-get install -y lubuntu-desktop
 
 if $AMD_GPU; then
-    # Install AMD ROCm driver
-    # https://view.readthedocs.io/en/latest/Installation_Guide/Installation-Guide.html#ubuntu-support-installing-from-a-debian-repository
-    sudo apt install -y libnuma-dev
-    wget -qO - http://repo.radeon.com/rocm/apt/debian/rocm.gpg.key | sudo apt-key add -
-    echo 'deb [arch=amd64] http://repo.radeon.com/rocm/apt/debian/ xenial main' | sudo tee /etc/apt/sources.list.d/rocm.list
-    sudo apt update
-
     # This is required to fix errors in dmesg like this:
     # amdgpu: Unknown symbol amd_iommu_bind_pasid (err -2)
     # see also https://github.com/RadeonOpenCompute/ROCm/issues/738#issuecomment-473421554
-    sudo apt install -y linux-modules-extra-$(uname -r) -y
+    sudo apt install -y linux-modules-extra-$(uname -r)
 
-    sudo apt install -y rocm-dkms
+    # https://www.amd.com/en/support/kb/release-notes/rn-amdgpu-unified-linux-21-20
+    wget --referer https://www.amd.com https://drivers.amd.com/drivers/linux/amdgpu-pro-21.20-1274019-ubuntu-18.04.tar.xz
+
+    tar -xf amdgpu-pro*ubuntu*.xz
+    rm amdgpu-pro*ubuntu*.xz
+    cd `ls | grep 'amdgpu.*ubuntu-18.04'`
+    sudo ./amdgpu-pro-install -y --no-32 --opencl=legacy,rocr
+    cd ..
+    rm -rf `ls | grep 'amdgpu.*ubuntu-18.04'`
+
     sudo usermod -a -G video $LOGNAME
+    #sudo usermod -a -G render $LOGNAME
     echo 'ADD_EXTRA_GROUPS=1' | sudo tee -a /etc/adduser.conf
     echo 'EXTRA_GROUPS=video' | sudo tee -a /etc/adduser.conf
+    #echo 'EXTRA_GROUPS=render' | sudo tee -a /etc/adduser.conf
 
-    # This is required to fix empty OpenCL devices list and error:
-    # dlerror: libamdocl64.so: cannot open shared object file: No such file or directory
-    AMD_VENDOR_ICD_FILE=/etc/OpenCL/vendors/`ls /etc/OpenCL/vendors/ | grep 'amdocl64*'`
-    echo "/opt/rocm/opencl/lib/libamdocl64.so" | sudo tee ${AMD_VENDOR_ICD_FILE}
+    # This can be required to fix empty OpenCL devices list and error:
+    # dlerror: libamdocl-orca64.so: cannot open shared object file: No such file or directory
+    #echo "/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamdocl-orca64.so" | sudo tee /etc/OpenCL/vendors/amdocl-orca64.icd
+    #echo "/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamdocl64.so" | sudo tee /etc/OpenCL/vendors/amdocl64.icd
+    #echo "/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamdocl12cl64.so" | sudo tee /etc/OpenCL/vendors/amdocl12cl64.icd
 
     # Install VirtualGL
     wget https://sourceforge.net/projects/virtualgl/files/2.5.2/virtualgl_2.5.2_amd64.deb/download -O virtualgl_2.5.2_amd64.deb
     sudo dpkg -i virtualgl*.deb
     rm virtualgl*.deb
 
-    # Install TurboVNC
-    wget https://sourceforge.net/projects/turbovnc/files/2.1.1/turbovnc_2.1.1_amd64.deb/download -O turbovnc_2.1.1_amd64.deb
-    sudo dpkg -i turbovnc*.deb
-    rm turbovnc*.deb
+    sudo apt build-dep -y x11vnc
+    sudo apt install -y libssl-dev libxtst-dev xorg-dev libvncserver-dev
+    git clone https://github.com/LibVNC/x11vnc
+    cd x11vnc
+    git checkout tags/0.9.16
+    autoreconf -fiv
+    ./configure
+    make -j12
+    sudo make install
 
     # Copy xorg.conf from instruction https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html
     sudo cp configs/xorg_aws_g4ad_amd_v520.conf /etc/X11/xorg.conf
