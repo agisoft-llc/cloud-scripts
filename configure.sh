@@ -49,8 +49,8 @@ if $AMD_GPU; then
     # see also https://github.com/RadeonOpenCompute/ROCm/issues/738#issuecomment-473421554
     sudo apt install -y linux-modules-extra-$(uname -r)
 
-    # https://www.amd.com/en/support/kb/release-notes/rn-amdgpu-unified-linux-21-20
-    wget --referer https://www.amd.com https://drivers.amd.com/drivers/linux/amdgpu-pro-21.20-1274019-ubuntu-18.04.tar.xz
+    # https://www.amd.com/en/support/kb/release-notes/rn-amdgpu-unified-linux-21-30
+    wget --referer https://www.amd.com https://drivers.amd.com/drivers/linux/amdgpu-pro-21.30-1286092-ubuntu-18.04.tar.xz
 
     tar -xf amdgpu-pro*ubuntu*.xz
     rm amdgpu-pro*ubuntu*.xz
