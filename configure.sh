@@ -47,12 +47,7 @@ if $AMD_GPU; then
     # Installing AMD driver, see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html (but we don't install 32-bit support)
 
     sudo apt install -y awscli
-    aws configure set default.region eu-west-1
-    aws configure set aws_access_key_id 'AKIAXGSD6XHYWRE3WWEG'
-    aws configure set aws_secret_access_key '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'
-    aws s3 cp --recursive s3://ec2-amd-linux-drivers/latest/ .
-    rm ~/.aws/credentials
-    rm ~/.aws/config
+    aws s3 cp --recursive s3://ec2-amd-linux-drivers/latest/ . --no-sign-request
 
     tar -xf amdgpu-pro*ubuntu*.xz
     rm amdgpu-pro*ubuntu*.xz
@@ -64,6 +59,11 @@ if $AMD_GPU; then
     sudo ./amdgpu-pro-install -y --no-32 --opencl=pal,legacy
     cd ..
     rm -rf `ls | grep 'amdgpu.*'`
+
+    # Install VirtualGL
+    wget https://sourceforge.net/projects/virtualgl/files/2.5.2/virtualgl_2.5.2_amd64.deb/download -O virtualgl_2.5.2_amd64.deb
+    sudo dpkg -i virtualgl*.deb
+    rm virtualgl*.deb
 
     # Installing x11vnc
     sudo apt install -y libssl-dev libxtst-dev xorg-dev libvncserver-dev
@@ -79,6 +79,10 @@ if $AMD_GPU; then
 
     # Copy xorg.conf from instruction https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html
     sudo cp configs/xorg_aws_g4ad_amd_v520.conf /etc/X11/xorg.conf
+
+    # Configure VirtualGL
+    sudo service lightdm stop
+    sudo /opt/VirtualGL/bin/vglserver_config -config +s +f -t
 
     # This is to fix errors in 'sudo service lightdm status':
     # "PAM unable to dlopen(pam_kwallet.so): /lib/security/pam_kwallet.so: cannot open shared object file: No such file or directory"
