@@ -44,38 +44,46 @@ fi
 sudo apt-get install -y lubuntu-desktop
 
 if $AMD_GPU; then
-    # This is required to fix errors in dmesg like this:
-    # amdgpu: Unknown symbol amd_iommu_bind_pasid (err -2)
-    # see also https://github.com/RadeonOpenCompute/ROCm/issues/738#issuecomment-473421554
-    sudo apt install -y linux-modules-extra-$(uname -r)
+    # Installing AMD driver, see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html (but we don't install 32-bit support)
 
-    # https://www.amd.com/en/support/kb/release-notes/rn-amdgpu-unified-linux-21-30
-    wget --referer https://www.amd.com https://drivers.amd.com/drivers/linux/amdgpu-pro-21.30-1286092-ubuntu-18.04.tar.xz
+    sudo apt install -y awscli
+    echo ""
+    echo "***************************************************************************************************"
+    echo "*                                                                                                 *"
+    echo "* To download AMD driver from Amazon S3 storage - you need to create an access token in IAM:      *"
+    echo "* 1) Open Identity and Access Management (IAM): https://console.aws.amazon.com/iamv2/home#/users  *"
+    echo "* 2) Add users                                                                                    *"
+    echo "* 3) User name: userForAmdDriverDownload                                                          *"
+    echo "* 4) Tick 'Programmatic access'                                                                   *"
+    echo "* 5) Next: Permissions                                                                            *"
+    echo "* 6) Attach existing policies directly -> Filter policies: S3                                     *"
+    echo "* 7) Tick 'AmazonS3ReadOnlyAccess'                                                                *"
+    echo "* 8) Next: Tags -> Next: Review -> Create user                                                    *"
+    echo "* 9) Copy and paste 'Access key ID' into the terminal -> Enter                                    *"
+    echo "* 10) Copy and paste 'Secret access key' into the terminal (click 'Show') -> Enter                *"
+    echo "* 11) Default region name [None]: -> enter your region (f.e. eu-west-1)                           *"
+    echo "* 12) Default output format [None]: -> leave empty and press Enter                                *"
+    echo "*                                                                                                 *"
+    echo "***************************************************************************************************"
+    echo ""
+    aws configure
+
+    aws s3 cp --recursive s3://ec2-amd-linux-drivers/latest/ .
+    # If you see "fatal error: An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied"
+    # This means that you created user in IAM with incorrect S3 storage access privileges
 
     tar -xf amdgpu-pro*ubuntu*.xz
     rm amdgpu-pro*ubuntu*.xz
     cd `ls | grep 'amdgpu.*ubuntu-18.04'`
-    sudo ./amdgpu-pro-install -y --no-32 --opencl=legacy,rocr
+
+    sudo apt install linux-modules-extra-$(uname -r) -y
+    cat RPM-GPG-KEY-amdgpu | sudo apt-key add -
+
+    sudo ./amdgpu-pro-install -y --no-32 --opencl=pal,legacy
     cd ..
     rm -rf `ls | grep 'amdgpu.*ubuntu-18.04'`
 
-    sudo usermod -a -G video $LOGNAME
-    #sudo usermod -a -G render $LOGNAME
-    echo 'ADD_EXTRA_GROUPS=1' | sudo tee -a /etc/adduser.conf
-    echo 'EXTRA_GROUPS=video' | sudo tee -a /etc/adduser.conf
-    #echo 'EXTRA_GROUPS=render' | sudo tee -a /etc/adduser.conf
-
-    # This can be required to fix empty OpenCL devices list and error:
-    # dlerror: libamdocl-orca64.so: cannot open shared object file: No such file or directory
-    #echo "/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamdocl-orca64.so" | sudo tee /etc/OpenCL/vendors/amdocl-orca64.icd
-    #echo "/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamdocl64.so" | sudo tee /etc/OpenCL/vendors/amdocl64.icd
-    #echo "/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamdocl12cl64.so" | sudo tee /etc/OpenCL/vendors/amdocl12cl64.icd
-
-    # Install VirtualGL
-    wget https://sourceforge.net/projects/virtualgl/files/2.5.2/virtualgl_2.5.2_amd64.deb/download -O virtualgl_2.5.2_amd64.deb
-    sudo dpkg -i virtualgl*.deb
-    rm virtualgl*.deb
-
+    # Installing x11vnc
     sudo apt install -y libssl-dev libxtst-dev xorg-dev libvncserver-dev
     git clone https://github.com/LibVNC/x11vnc
     cd x11vnc
@@ -85,13 +93,10 @@ if $AMD_GPU; then
     make -j12
     sudo make install
     cd ..
+    rm -rf x11vnc
 
     # Copy xorg.conf from instruction https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html
     sudo cp configs/xorg_aws_g4ad_amd_v520.conf /etc/X11/xorg.conf
-
-    # Configure VirtualGL
-    sudo service lightdm stop
-    sudo /opt/VirtualGL/bin/vglserver_config -config +s +f -t
 
     # This is to fix errors in 'sudo service lightdm status':
     # "PAM unable to dlopen(pam_kwallet.so): /lib/security/pam_kwallet.so: cannot open shared object file: No such file or directory"
