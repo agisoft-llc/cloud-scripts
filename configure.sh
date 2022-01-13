@@ -47,30 +47,12 @@ if $AMD_GPU; then
     # Installing AMD driver, see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html (but we don't install 32-bit support)
 
     sudo apt install -y awscli
-    echo ""
-    echo "***************************************************************************************************"
-    echo "*                                                                                                 *"
-    echo "* To download AMD driver from Amazon S3 storage - you need to create an access token in IAM:      *"
-    echo "* 1) Open Identity and Access Management (IAM): https://console.aws.amazon.com/iamv2/home#/users  *"
-    echo "* 2) Add users                                                                                    *"
-    echo "* 3) User name: userForAmdDriverDownload                                                          *"
-    echo "* 4) Tick 'Programmatic access'                                                                   *"
-    echo "* 5) Next: Permissions                                                                            *"
-    echo "* 6) Attach existing policies directly -> Filter policies: S3                                     *"
-    echo "* 7) Tick 'AmazonS3ReadOnlyAccess'                                                                *"
-    echo "* 8) Next: Tags -> Next: Review -> Create user                                                    *"
-    echo "* 9) Copy and paste 'Access key ID' into the terminal -> Enter                                    *"
-    echo "* 10) Copy and paste 'Secret access key' into the terminal (click 'Show') -> Enter                *"
-    echo "* 11) Default region name [None]: -> enter your region (f.e. eu-west-1)                           *"
-    echo "* 12) Default output format [None]: -> leave empty and press Enter                                *"
-    echo "*                                                                                                 *"
-    echo "***************************************************************************************************"
-    echo ""
-    aws configure
-
+    aws configure set default.region eu-west-1
+    aws configure set aws_access_key_id 'AKIAXGSD6XHYWRE3WWEG'
+    aws configure set aws_secret_access_key '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'
     aws s3 cp --recursive s3://ec2-amd-linux-drivers/latest/ .
-    # If you see "fatal error: An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied"
-    # This means that you created user in IAM with incorrect S3 storage access privileges
+    rm ~/.aws/credentials
+    rm ~/.aws/config
 
     tar -xf amdgpu-pro*ubuntu*.xz
     rm amdgpu-pro*ubuntu*.xz
@@ -81,7 +63,7 @@ if $AMD_GPU; then
 
     sudo ./amdgpu-pro-install -y --no-32 --opencl=pal,legacy
     cd ..
-    rm -rf `ls | grep 'amdgpu.*ubuntu-18.04'`
+    rm -rf `ls | grep 'amdgpu.*'`
 
     # Installing x11vnc
     sudo apt install -y libssl-dev libxtst-dev xorg-dev libvncserver-dev
