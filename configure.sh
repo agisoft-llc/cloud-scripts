@@ -80,6 +80,13 @@ if $AMD_GPU; then
     # Copy xorg.conf from instruction https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-amd-driver.html
     sudo cp configs/xorg_aws_g4ad_amd_v520.conf /etc/X11/xorg.conf
 
+    # Fix /etc/X11/xorg.conf:
+    # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller|Display controller")
+    # For EC2 g3, g4 and p3 also:
+    # 2. Delete whole section ServerLayout (comment it with # symbol)
+    # 3. Delete whole section Screen (comment it with # symbol)
+    sudo /usr/bin/python2.7 fix_xorg_conf.py /etc/X11/xorg.conf
+
     # Configure VirtualGL
     sudo service lightdm stop
     sudo /opt/VirtualGL/bin/vglserver_config -config +s +f -t

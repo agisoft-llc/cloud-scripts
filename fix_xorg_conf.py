@@ -113,6 +113,11 @@ if __name__ == '__main__':
             if current_section in sections_to_delete:
                 removed = True
 
+            if current_section is not None and line.startswith("    BusID"):
+                if current_section == "Device":
+                    # we want to delete all BusID sections - because we will write our own ones
+                    removed = True
+
             if current_section is not None and line == section_end:
                 if current_section == "Device":
                     _, _, bus_id_decimal = gpus[device_index]
