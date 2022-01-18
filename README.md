@@ -2,7 +2,7 @@
 
 These scripts can configure Ubuntu 18.04 on EC2 graphics instances to support running OpenGL applications in TurboVNC via VirtualGL.
 
-Please note that these scripts are tested on Amazon EC2 g2, g3, g4, p2, p3 and g4ad (AMD V520) instances, but they can work without or with a little changes on instances of other hosting providers.
+Please note that these scripts are tested on Amazon EC2 g2, g3, g4, g5, p2, p3 and g4ad (AMD V520) instances, but they can work without or with a little changes on instances of other hosting providers.
 
 # EC2 instances
 
@@ -12,13 +12,15 @@ Recommended instance - **g4ad.8xlarge**. Note that it is compatible only since M
 | ------------- | ------- | --------- | -------- | --------- | ------ | --------------- | --------------- |
 | Baseline Linux| GTX1080 |   x1.0    | i7 5960X | x1.0      | 64 Gb  | N/A             | N/A             |
 | Baseline Win7 | GTX1080 |   x0.85   | i7 5960X | x1.0      | 64 Gb  | N/A             | N/A             |
-| p2.xlarge     | 1 x K80 |   x0.35   |  4 vCPUs | x0.31     | 61 GiB | $ 0.97 per hour | ~ $0.3 per hour |
 | g3.4xlarge    | 1 x M60 |   x0.7    | 16 vCPUs | x1.16     | 122 GiB| $ 1.21 per hour | ~ $0.4 per hour |
 | g3.8xlarge    | 2 x M60 |   x1.38   | 32 vCPUs | x2.09     | 244 GiB| $ 2.42 per hour | ~ $0.7 per hour |
 | g3.16xlarge   | 4 x M60 |   x2.58   | 64 vCPUs | x2.74     | 488 GiB| $ 4.84 per hour | ~ $1.5 per hour |
 |   g4ad.4xlarge|1 x V520 |   x0.85   | 16 vCPUs | x1.31     |  64 GiB| $ 0.96 per hour | ~ $0.3 per hour |
 |**g4ad.8xlarge**|2 x V520|   x1.63   | 32 vCPUs | x2.3      | 128 GiB| $ 1.94 per hour | ~ $0.6 per hour |
 |  g4ad.16xlarge|4 x V520 |   x2.72   | 64 vCPUs | x3.2      | 256 GiB| $ 3.87 per hour | ~ $1.2 per hour |
+| g5.4xlarge    | 1 x A10G|   x1.84   | 16 vCPUs | x1.31     |  64 GiB| $ 1.8  per hour | ~ $0.6 per hour |
+| g5.12xlarge   | 4 x A10G|   x3.78   | 48 vCPUs | x3.0      | 192 GiB| $ 6.3  per hour | ~ $1.9 per hour |
+| p2.xlarge     | 1 x K80 |   x0.35   |  4 vCPUs | x0.31     | 61 GiB | $ 0.97 per hour | ~ $0.3 per hour |
 | p3.2xlarge    | 1 x V100|   x2.05   |  8 vCPUs | x0.61     | 61  GiB| $ 3.3  per hour | ~ $1   per hour |
 | p3.8xlarge    | 4 x V100|   x6.95   | 32 vCPUs | x2.1      | 244 GiB| $13.2  per hour | ~ $4   per hour |
 
