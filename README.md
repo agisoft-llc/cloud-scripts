@@ -16,8 +16,9 @@ Recommended instance - **g4ad.8xlarge**. Note that it is compatible only since M
 | g3.4xlarge    | 1 x M60 |   x0.7    | 16 vCPUs | x1.16     | 122 GiB| $ 1.21 per hour | ~ $0.4 per hour |
 | g3.8xlarge    | 2 x M60 |   x1.38   | 32 vCPUs | x2.09     | 244 GiB| $ 2.42 per hour | ~ $0.7 per hour |
 | g3.16xlarge   | 4 x M60 |   x2.58   | 64 vCPUs | x2.74     | 488 GiB| $ 4.84 per hour | ~ $1.5 per hour |
-|**g4ad.4xlarge**|1 x V520|   x0.85   | 16 vCPUs | x1.31     |  64 GiB| $ 0.96 per hour | ~ $0.3 per hour |
+|   g4ad.4xlarge|1 x V520 |   x0.85   | 16 vCPUs | x1.31     |  64 GiB| $ 0.96 per hour | ~ $0.3 per hour |
 |**g4ad.8xlarge**|2 x V520|   x1.63   | 32 vCPUs | x2.3      | 128 GiB| $ 1.94 per hour | ~ $0.6 per hour |
+|  g4ad.16xlarge|4 x V520 |   x2.72   | 64 vCPUs | x3.2      | 256 GiB| $ 3.87 per hour | ~ $1.2 per hour |
 | p3.2xlarge    | 1 x V100|   x2.05   |  8 vCPUs | x0.61     | 61  GiB| $ 3.3  per hour | ~ $1   per hour |
 | p3.8xlarge    | 4 x V100|   x6.95   | 32 vCPUs | x2.1      | 244 GiB| $13.2  per hour | ~ $4   per hour |
 
