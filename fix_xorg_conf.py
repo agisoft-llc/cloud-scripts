@@ -47,15 +47,15 @@ if __name__ == '__main__':
                 instance_type = "EC2 g2"
             elif "Tesla M60" in line:
                 instance_type = "EC2 g3"
-            elif "NVIDIA Corporation Device 1eb8 (rev a1)" in line:  # Tesla T4
+            elif ("Tesla T4" in line) or ("Device 1eb8" in line):
                 instance_type = "EC2 g4"
+            elif ("Tesla A10G" in line) or ("Device 2237" in line):
+                instance_type = "EC2 g5"
             elif "Tesla K80" in line:
                 instance_type = "EC2 p2"
-            elif "NVIDIA Corporation Device 1db1 (rev a1)" in line:
+            elif ("Tesla V100" in line) or ("Device 1db1" in line):
                 instance_type = "EC2 p3"
-            elif "NVIDIA Corporation GV100GL [Tesla V100 SXM2 16GB] (rev a1)" in line:
-                instance_type = "EC2 p3"
-            elif "NVIDIA Corporation Device 15f8 (rev a1)" in line:
+            elif ("Tesla P100-PCIE" in line) or ("Device 15f8" in line):
                 instance_type = "P100 PCIE"
             else:
                 print("Unexpected NVIDIA GPU device: {}".format(line))
@@ -113,7 +113,7 @@ if __name__ == '__main__':
             if current_section in sections_to_delete:
                 removed = True
 
-            if current_section is not None and line.startswith("    BusID"):
+            if current_section is not None and line.strip().startswith("BusID"):
                 if current_section == "Device":
                     # we want to delete all BusID sections - because we will write our own ones
                     removed = True
