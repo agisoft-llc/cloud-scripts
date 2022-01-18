@@ -24,7 +24,7 @@ if lspci | egrep -q -h "Display controller: Advanced Micro Devices, Inc"; then
     # You will be asked to enter Password twice.
     # You will be also asked:
     #  Would you like to enter a view-only password (y/n)? n
-elif lspci | egrep -q -h "VGA compatible controller: NVIDIA Corporation"; then
+elif lspci | egrep -q -h "NVIDIA Corporation"; then
     NVIDIA_GPU=true
 
     # Start the X server
