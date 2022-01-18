@@ -9,11 +9,16 @@ NVIDIA_GPU=false
 
 if lspci | egrep -q -h "Display controller: Advanced Micro Devices, Inc"; then
     AMD_GPU=true
-elif lspci | egrep -q -h "NVIDIA Corporation Device 1eb8 \(rev a1\)"; then
-    # Tesla T4
+elif lspci | egrep -q -h "Tesla A10G|Device 2237"; then
+    # EC2 g5
+    NVIDIA_GPU=true
+    NVIDIA_DRIVER=470.82.01
+    NVIDIA_DRIVER_URL=http://us.download.nvidia.com/tesla/${NVIDIA_DRIVER}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
+elif lspci | egrep -q -h "Tesla T4|Device 1eb8"; then
+    # EC2 g4
     NVIDIA_GPU=true
     NVIDIA_DRIVER=450.51.06
-    NVIDIA_DRIVER_URL=http://us.download.nvidia.com/tesla/450.51.06/NVIDIA-Linux-x86_64-450.51.06.run
+    NVIDIA_DRIVER_URL=http://us.download.nvidia.com/tesla/${NVIDIA_DRIVER}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
 elif [ "$ubuntu_codename" = "bionic" ] ; then
     # Ubuntu 18.04
     NVIDIA_GPU=true
