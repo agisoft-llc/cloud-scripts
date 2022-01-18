@@ -80,18 +80,18 @@ if __name__ == '__main__':
         lines = config.readlines()
 
     # 1. Add line with BusID in section Device (taken from output of lspci | egrep -h "VGA|3D controller|Display controller")
-    # For EC2 g3, EC2 g4, EC2 p3 and for P100 PCIE also:
+    # For EC2 g3, EC2 g4, EC2 g5, EC2 p3 and for P100 PCIE also:
     # 2. Delete whole section ServerLayout (comment it with # symbol)
     # 3. Delete whole section Screen (comment it with # symbol)
     #
-    # On EC2 g3, EC2 g4, EC2 p3 and for P100 PCIE steps 2 and 3 to fix this error in /var/log/Xorg.0.log:
+    # On EC2 g3, EC2 g4, EC2 g5, EC2 p3 and for P100 PCIE steps 2 and 3 to fix this error in /var/log/Xorg.0.log:
     # (EE) NVIDIA(GPU-0): UseDisplayDevice "None" is not supported with GRID
     # (EE) NVIDIA(GPU-0):     displayless
     # (EE) NVIDIA(GPU-0): Failed to select a display subsystem.
     section_start = "Section \""
     section_end   = "EndSection\n"
     sections_to_delete = []
-    if instance_type in ["EC2 g3", "EC2 g4", "EC2 p3", "P100 PCIE"]:
+    if instance_type in ["EC2 g3", "EC2 g4", "EC2 g5", "EC2 p3", "P100 PCIE"]:
         sections_to_delete = ["ServerLayout", "Screen"]
 
     sections_deleted = []
