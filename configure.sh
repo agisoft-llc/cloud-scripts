@@ -9,6 +9,11 @@ NVIDIA_GPU=false
 
 if lspci | egrep -q -h "Display controller: Advanced Micro Devices, Inc"; then
     AMD_GPU=true
+elif [ "$ubuntu_codename" = "focal" ] ; then
+    # Ubuntu 20.04
+    NVIDIA_GPU=true
+    NVIDIA_DRIVER=470.82.01
+    NVIDIA_DRIVER_URL=http://us.download.nvidia.com/tesla/${NVIDIA_DRIVER}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER}.run
 elif lspci | egrep -q -h "Tesla A10G|Device 2237"; then
     # EC2 g5
     NVIDIA_GPU=true
