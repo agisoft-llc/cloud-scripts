@@ -40,7 +40,7 @@ If you need assistance with launching on them - create issue, or start topic [on
 Connect to instance with Ubuntu 18.04 via ssh:
 
 ```bash
-ip=239.239.239.239
+ip=239.239.239.239 # use "Public IP address" from "Running Instances" page on EC2 dashboard
 private_key=~/.ssh/private_key.pem
 
 ssh -p 22 -i ${private_key} ubuntu@${ip}
@@ -80,7 +80,7 @@ chmod +x start_vnc_server.sh
 # Press Ctrl+D to disconnect
 ```
 
-Connect with TurboVNC (don't forget to allow inbounds for 5901 port in security groups):
+Connect with TurboVNC from **local computer** (don't forget to allow inbounds for 5901 port in security groups of the instance):
 ```bash
 # You can install it with:
 #   wget https://sourceforge.net/projects/turbovnc/files/2.1.1/turbovnc_2.1.1_amd64.deb/download -O turbovnc_2.1.1_amd64.deb
@@ -92,9 +92,9 @@ Connect with TurboVNC (don't forget to allow inbounds for 5901 port in security 
 In terminal on instance you can download and run Metashape or any other OpenGL app with GUI:
 ```bash
 # Download Metashape from http://www.agisoft.com/downloads/installer/
-wget https://s3-eu-west-1.amazonaws.com/download.agisoft.com/metashape-pro_1_8_1_amd64.tar.gz
+wget https://s3-eu-west-1.amazonaws.com/download.agisoft.com/metashape-pro_1_8_2_amd64.tar.gz
 # Extract it:
-tar -zxf metashape-pro_1_8_1_amd64.tar.gz
+tar -zxf metashape-pro_1_8_2_amd64.tar.gz
 
 # Now you can run any OpenGL application:
 
