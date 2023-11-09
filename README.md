@@ -87,6 +87,10 @@ Connect with TurboVNC from **local computer** (don't forget to allow inbounds fo
 #   sudo dpkg -i turbovnc*.deb
 /opt/TurboVNC/bin/vncviewer ${ip}:5901
 # Enter password you configured above
+# If you encounter error like this:
+#   WARNING: Could not find libjawt.so Some features may not work properly.
+# Then use on local computer:
+#   sudo apt install openjdk-8-jre
 ```
 
 In terminal on instance you can download and run Metashape or any other OpenGL app with GUI:
